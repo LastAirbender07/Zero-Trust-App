@@ -23,6 +23,40 @@ def create_user(data):
     except Exception as e:
         return {"error": str(e)}, 400
 
+# def create_user_session(username, login_time, logout_time=None):
+#     try:
+#         user = mongo.Users.find_one({"username": username})
+#         if not user:
+#             return {"error": "User not found"}, 404
+#         elif user["role"] is None:
+#             return {"error": "User role not set"}, 401
+
+#         user_id = user["_id"]
+#         today_date = datetime.utcnow().strftime("%Y-%m-%d")
+#         session = {
+#             "login_time": login_time,
+#             "logout_time": logout_time
+#         }
+
+#         existing_session = mongo.user_sessions.find_one({"user_id": user_id, "date": today_date})
+#         if existing_session:
+#             mongo.user_sessions.update_one(
+#                 {"user_id": user_id, "date": today_date},
+#                 {"$push": {"sessions": session}}
+#             )
+#         else:
+#             session_record = {
+#                 "user_id": user_id,
+#                 "username": username,
+#                 "role": user["role"],
+#                 "date": today_date,
+#                 "sessions": [session]
+#             }
+#             mongo.user_sessions.insert_one(session_record)
+#         return {"message": "Session updated successfully", "user_id": str(user["_id"]), "role": user['role']}, 200
+#     except Exception as e:
+#         return {"error": str(e)}, 400
+
 def create_user_session(username, login_time, logout_time=None):
     try:
         user = mongo.Users.find_one({"username": username})
@@ -38,21 +72,26 @@ def create_user_session(username, login_time, logout_time=None):
             "logout_time": logout_time
         }
 
-        existing_session = mongo.user_sessions.find_one({"user_id": user_id, "date": today_date})
+        existing_session = mongo.user_sessions.find_one({"user_id": user_id, "sessions.date": today_date})
         if existing_session:
             mongo.user_sessions.update_one(
-                {"user_id": user_id, "date": today_date},
-                {"$push": {"sessions": session}}
+                {"user_id": user_id, "sessions.date": today_date},
+                {"$push": {"sessions.$.sessions": session}}
             )
         else:
             session_record = {
                 "user_id": user_id,
                 "username": username,
                 "role": user["role"],
-                "date": today_date,
-                "sessions": [session]
+                "sessions": [
+                    {
+                        "date": today_date,
+                        "sessions": [session]
+                    }
+                ]
             }
             mongo.user_sessions.insert_one(session_record)
-        return {"message": "Session updated successfully"}, 200
+        return {"message": "Session updated successfully", "user_id": str(user["_id"]), "role": user['role']}, 200
     except Exception as e:
         return {"error": str(e)}, 400
+

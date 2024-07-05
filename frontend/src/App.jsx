@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -6,8 +7,7 @@ import NotFound from "./pages/NotFound";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  const authUser = false;
-
+  const authUser = useSelector((state) => state.user.status);
   return (
     <>
       <Routes>

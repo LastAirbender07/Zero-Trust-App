@@ -1,10 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import AdminPage from "./AdminPage";
 import axios from "axios";
 
-// connect to http://127.0.0.1:5001/api/users and get the data and display it here
-
 const HomePage = () => {
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -15,6 +17,10 @@ const HomePage = () => {
     };
     fetchAPI();
   }, []);
+
+  if (user.role === "admin") {
+    return <AdminPage />;
+  }
 
   return (
     <div className="bg-black flex justify-center items-center h-screen">

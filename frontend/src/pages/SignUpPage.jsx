@@ -4,7 +4,7 @@ import InputField from "../components/InputField";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import bcrypt from "bcryptjs";
+import { sha256 } from 'js-sha256';
 
 const SignUpPage = () => {
 	const [signUpData, setSignUpData] = useState({
@@ -46,7 +46,7 @@ const SignUpPage = () => {
 	
 		setLoading(true);
 		try {
-			const hashedPassword = await bcrypt.hash(signUpData.password, 10);
+			const hashedPassword = sha256(loginData.password);
 			const dataToSend = {
 				...signUpData,
 				password: hashedPassword,
