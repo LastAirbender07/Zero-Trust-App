@@ -2,6 +2,7 @@
 from flask import Blueprint, request, jsonify
 from app.models import create_user, create_user_session
 from .utils import validate_signup_data, validate_login_data
+from bson.objectid import ObjectId
 from datetime import datetime
 from app import mongo
 
@@ -58,3 +59,12 @@ def update_user_role():
     if result.modified_count == 1:
         return jsonify({"message": "User role updated successfully"}), 200
     return jsonify({"error": "Failed to update user role"}), 400
+
+@auth_bp.route("/delete-user", methods=["POST"])
+def delete_user():
+    data = request.get_json()
+    user_id = data.get("user_id")
+    result = mongo.Users.delete_one({"_id": ObjectId(user_id)})
+    if result.deleted_count == 1:
+        return jsonify({"message": "User deleted successfully"}), 200
+    return jsonify({"error": "Failed to delete user"}), 400

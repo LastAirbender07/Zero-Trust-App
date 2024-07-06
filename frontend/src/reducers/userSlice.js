@@ -48,5 +48,16 @@ export const updateUserRole = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async ({ userId }) => {
+    const response = await axios.post(
+      "http://127.0.0.1:5001/auth/delete-user",
+      { user_id: userId }
+    );
+    return response.data;
+  }
+);
+
 export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -46,7 +46,7 @@ const SignUpPage = () => {
 	
 		setLoading(true);
 		try {
-			const hashedPassword = sha256(loginData.password);
+			const hashedPassword = sha256(signUpData.password);
 			const dataToSend = {
 				...signUpData,
 				password: hashedPassword,

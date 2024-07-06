@@ -1,20 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import InputField from "../components/InputField";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { setUser } from "../reducers/userSlice";
 import { sha256 } from 'js-sha256';
-
-const myFunction = async () => {
-    const password = "John2468$"
-    const hashedPassword = await bcrypt.hash(password, 8)
-    console.log(password);
-    console.log(hashedPassword);
-}
-
-myFunction()
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,7 +15,15 @@ const LoginPage = () => {
     password: "",
   });
 
+  const userStatus = useSelector((state) => state.user.status);
+
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (userStatus) {
+      navigate("/");
+    }
+  }, [userStatus, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
