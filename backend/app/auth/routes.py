@@ -62,9 +62,12 @@ def update_user_role():
 
 @auth_bp.route("/delete-user", methods=["POST"])
 def delete_user():
-    data = request.get_json()
-    user_id = data.get("user_id")
-    result = mongo.Users.delete_one({"_id": ObjectId(user_id)})
-    if result.deleted_count == 1:
-        return jsonify({"message": "User deleted successfully"}), 200
-    return jsonify({"error": "Failed to delete user"}), 400
+    try:
+        data = request.get_json()
+        user_id = data.get("user_id")
+        result = mongo.Users.delete_one({"_id": ObjectId(user_id)})
+        if result.deleted_count == 1:
+            return jsonify({"message": "User deleted successfully"}), 200
+        return jsonify({"error": "Failed to delete user"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400

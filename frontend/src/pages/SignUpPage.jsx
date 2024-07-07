@@ -8,7 +8,6 @@ import { sha256 } from 'js-sha256';
 
 const SignUpPage = () => {
 	const [signUpData, setSignUpData] = useState({
-		name: "",
 		username: "",
 		email: "",
 		password: "",
@@ -37,7 +36,7 @@ const SignUpPage = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!signUpData.name || !signUpData.username || !signUpData.password || !signUpData.gender || !signUpData.email || !signUpData.confirmPassword) {
+		if (!signUpData.username || !signUpData.password || !signUpData.gender || !signUpData.email || !signUpData.confirmPassword) {
 		  return toast.error("Please fill all the fields");
 		}
 		if (signUpData.password !== signUpData.confirmPassword) {
@@ -74,13 +73,6 @@ const SignUpPage = () => {
 							Join to track your activities
 						</h1>
 						<form className='space-y-4' onSubmit={handleSubmit}>
-							<InputField
-								label='Full Name'
-								id='name'
-								name='name'
-								value={signUpData.name}
-								onChange={handleChange}
-							/>
 							<InputField
 								label='Username'
 								id='username'

@@ -16,7 +16,6 @@ const LoginPage = () => {
   });
 
   const userStatus = useSelector((state) => state.user.status);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -41,8 +40,6 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const hashedPassword = sha256(loginData.password);
-      console.log(loginData.password, hashedPassword);
-
       const response = await axios.post(
         "http://127.0.0.1:5001/auth/login",
         {

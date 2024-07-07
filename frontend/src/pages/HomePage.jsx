@@ -5,7 +5,6 @@ import UserPage from "./UserPage";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user.user);
-  // console.log(user);
 
   if (user.role === "admin") {
     return <AdminPage />;
